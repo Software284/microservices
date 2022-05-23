@@ -1,0 +1,9 @@
+package com.lamichhane.users.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.lamichhane.users.entity.UserEntity;
+
+public interface UsersDao extends JpaRepository<UserEntity, Long> {
+
+}

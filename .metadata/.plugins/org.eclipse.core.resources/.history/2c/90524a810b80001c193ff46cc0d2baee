@@ -1,0 +1,20 @@
+package com.lamichhane.users.entity;
+
+import java.io.Serializable;
+
+public class UserEntity implements Serializable {
+	
+	private static final long serialVersionUID = 9675680900817L;
+	
+	private long id;
+	private String firstName;
+	private String lastName;
+	private String password;
+	private String email;
+	private String userId;
+	private String encryptedPassword;
+	
+	
+	
+
+}

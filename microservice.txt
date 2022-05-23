@@ -1,0 +1,576 @@
+What is a Microservice?
+-> Microservices are a software development technique-a variant of the service-oriented
+architecture(SOA) architectural style that structures an application as a collection of
+loosely coupled services.
+in a microservices architecture,services are fine-granided.the benefit of decomposing
+an application into different smaller services is that it improves modularity.this makes
+the application easier to understand,develop,test,and become more resilent to arctitecutre
+erosion.
+it parallelizes development by enabling small autonomous teams to develop,deploy and
+scale their service independently.
+-> A Web Service
+-> Small and Responsible for one thing(Search,Password Reset,Email Verification)
+-> Configured to work in the cloud and easily scalable.
+
+Microservices vs Monolithic Application:-> We can have a monolithic application which can
+be a single spring boot application with multiple controller classes each controller
+classes is responsible for one particular domain or a business capability like for 
+example working with users or working with a product or a search functionality but all
+of these controllers are in one single spring boot application and if you make a change
+to any of this controllers then you have to rebuild and redeploy the entire application.
+if we look at microservices architecture,here we have multiple smaller web services rather
+than one single large monolithic web service.these web service are much smaller and each
+web service is responsible for it's one thing for one particular business capability.one
+web service is responsible for working with user resource like for example create and upate
+the user details while another web service is responsible only to perform the email 
+verification functionality.these web services can also be implemented in different 
+programming languages and hosted on different platforms.For example a user web service
+might be implemented with Java Spring Boot and Spring MVC,the address web service can also
+be a spring boot and spring mvc web service,while the product web service can be 
+implemented with Jersey and JAX-RS address and search web service can be web service 
+implemented with PHP.
+since micro services are separate web services they somehow need to communicate with each
+other.in monolithic application which can simply import product class into a user service
+class.in microservices it is not always possible as microservices are separte applications 
+might even be implemented in different programming language. so the way microservices 
+communicate with each other is mostly via HTTP.
+
+
+Spring Cloud Eureka Server:-> it is also called spring cloud netflix eureka server beca
+use netflix has built it for their needs and until now they are actively using it.now 
+eureka is used by hundreads of other large companies and developers around the world.
+eureka helps finds microservices find each other.
+let's say we have a client application a mobile app for example let's say we have micro
+service created and it is called users.so if a client application wants to communicate
+with users micro service it needs to know its address.the address usually looks like a
+domain name more and the ip address and a port number.so for a client application to 
+be able to send a http request to our users web service it needs to know its address so
+that it can send this request to it.we can hard code the address of users microservice in 
+our client application and then our mobile application will be able to communicate with
+user micro service just fine.but what if we need to scale up and start more instances of
+users micro service.please note that each additional instance of our users micro service
+will need to stand up on its own port number which means it is a different address.our
+mobile application does not know this new port numbers and it is not able to send http request 
+to this new instance of user micro service.it will continue to communicate only with one
+and use of users microservice and that it is aware of another service.
+here comes the eureka doscovery server when each of users microservie starts up it will
+register itself with eureka discovery service so eureka will know the address of each
+micro service.if there are three instances of users micro service eureka will know the
+address of each of them.when a new instance of user microservice starts up it then 
+registers itself with eureka.you do not need to open eureka configuration file and 
+manually add a location of a new micro service.
+so if a load in your application increases and you need to start up ten or more
+instances of users microservice you can easily do that.similarly when you do not need
+many instances of users micro serivice anymore you can stop some of them.when you stop
+the micro services that you do not need anymore their allocation will be removed from eureka
+discovery server automatically.you do not need to update configuration files manually.
+so this helps you to quickly scale your application up and down as needed without manually
+configuring and removing the location of each microservice in a discovery server.
+
+when we add load balance to our architecture then eureka server will tell our load 
+balancr about the location of each instance of users microservice.so our client app
+which can be a mobile app for example or it can be another micro service will  send the
+request to a web service which it knows by its need.our load balancer will then ask
+eureka  the locations of all the instances of microservice that it knows under the name
+users.eureka will give the locations of all available and running users microservice to a
+load balancer and the load balancer it will then balance the load and run the micro
+service as needed.
+
+Zuul API Gateway:-> when microservices startup they registered themselves with eureka
+iscovery service then eureka becomes aware of each of your microservice and their 
+address.when we need to scale up we can start 10 or more micro services and each of them
+will then go and register with eureka automatically and eureka will know it's address.
+so when we start more instances of users micro service for example each instance of users
+micro service will have a unique address and request from client application now need to be
+balanced between these available instance of users micro service.
+so we will  need to have a load balancer and there is a load balancer called ribbon which 
+also comes from netflix family which distribute requests coming from client application
+equally between this running instances of our micro service and this will make our api
+more robust when a load in our system increases.when we start up three instances of users
+micro service it will now be three instances serving http request coming from a client
+application rather than a one single instance i.e load on one instance decreases.
+
+when we have an architecture like this in place we need to enable our application to have
+a single entrypoint or a system so the client application doesn't need to deal with
+multiple URL's.to help us with this spring cloud provides API gateway called Zuul which 
+also by the way comes from a NetFlix family.Great news is that a zuul api gateway has 
+ribbon load balancer built in so we will have to start up only one addtional application
+which is going to zuul and we will get two in one API gateway and we will get load balancer
+working for us.
+
+zuul api gateway will be a single entry point to our multiple instances of 
+running micro services.it will be accepting http reqeusts coming from a client app
+and then it will be routing this http requests to instances of micro services running
+behing the gateway and the list of adddress of all the running micro services all api
+gateway will get from you reach the discovery server.we will enable spring sercurity on 
+Zul api gateway and additionally to routing  incoming http request to destination micro
+services.
+
+Zuul will be perform user authorization for us if request to a protected web service does
+not contain a json web token in the authorization header.zuul api gateway will not let 
+that http request pass through and it will return proper error message.
+
+Zuul As Load Balancer:-> to add a load balancer functionality to our architecture starting
+at zuul is enough.there is default configuration which works right away and it works
+very well.if we start up more instances of users microservice zuul will balance incoming
+request equally between this front and instances of our users microservice.
+
+Spring Cloud Config Server:-> Unitl now we kept all application configuration details
+in the file called application.properties file and each our microservice that we have
+built in now have this file.application.properties file is usually a place where application
+configuration details are kept when we built traditional spring boot application.we store
+port number,username,password in application.properties file.we also used app.properties
+file to configure urls to micro services.spring cloud config server is required when
+multiple microservices app.properties contains same configuration details.let's say you
+have 30 or even 50 different micro services running and you need to make a change in 
+application configuration.let's say you need to change a value in application.properties
+file which means that after you make a change you will need to rebuild your micro
+service you will need to redeploy and restart them again.this might be fine to do if
+you had a single monolithic application but now you have 30 different micro services to 
+a built after making that change.so the solution is to use a spring cloud config server
+which provides a server side and the client side support for externalied configuration in
+a distributed systems.
+
+with spring cloud config server we have a central place to manage external properties for 
+applications across all environments.so with the help of spring cloud config server 
+we will keep our application configuration in the central secure storage and the possible
+options you have as a secure file system storage backend or a secure vault backend or a
+private repository which we are going to configure and this section will set up a new
+private repository on github and we will use that private repository as an external config
+uration storage for our micro services.since it is going to be git it will also be 
+version ans we will have a history of all the changes that we are making to our application
+configuration.so the external configuration you create and manage with the help of 
+spring cloud config server will  be available to all my micro services via an environment
+object which you already know how to autowire to your code. we have already used the 
+environment object when we were configuring these print security in our application. our
+micro services to start reading configuration details from a centralized storage.there
+is no changes we need to do to our java code. it will just all work once we set up and run
+our spring cloud config server.
+
+spring cloud config server is also spring boot application and it will let their micro
+services connect to it via HTTP and retrieve their configuration details when our
+micro services start up.if you need to you can still have some application configuration
+kept in application.properties file.if you use spring cloud config server the 
+configuration that comes from spring cloud config server will have a higher priority.
+
+run sequence:-> discovery service ->  config server -> zuul ->  users
+
+Spring Cloud Bus:-> we fetched configuration properties from spring cloud config server
+automatically.but the problem here is that micro services fetch configuration properties
+only once and they do it at startup time and then ones micro services have started they
+use this application configuration which was loaded at the startup time.if we make 
+a change to one of the values and our configuration properties which are currently stored
+in a git repository while our micro services are running,our micro services will not 
+receive those updates unless we restarted them so that they can load this app.properties 
+one more time and restarting all microservices every time when we update configuration
+properties is just not very convenient so here comes the spring cloud bus.
+
+spring cloud bus will help us to push configuration changes to all microservices while
+they are running.and for micro services to receive this updated configuration changes
+and start using the new values.they do not need to be restarted.so with the spring
+cloud bus configuration we can change configuration properties which we have and a git
+repository whenever it is needed.we can then push the new values to all our microservices
+and we do not need to restart anything which is very convenient.
+
+to configure spring cloud bus we will not need to create a new standalone microservice
+to make it all work.we will need to add a spring cloud bus and spring boot and actuator
+dependencies and also some other minor configuration details to a config server and 
+also to all other micro services that will need to receive those dynamic application
+configuration updates.this will make our micro services work as listeners or works as
+subscribers to receive updates from spring cloud config server and this updates they 
+will be broadcasted to all subscribed micro services with the help of messaging technology
+and the protocol used is a AMQP which stands for Advance message queing protocol and it
+enables applications that uses it to connect and scale.
+
+this messanger is asynchronous and it decouple applicaiton by separating sending and 
+receiving data and there is a message broker that will also need to configure and it's
+called Rabbit MQ.
+Rabbit MQ:->
+-> Messaging Broker
+-> it is an intermediary for messaging
+-> it gives applications a common platform to send and receive messages, and for messages
+a safe place to live until they are received.
+
+Note:-> we need to send /bus-refresh form actuator end points then spring cloud bus
+will automatically broadcast all those changes to all the subscriber microservices using
+rabbit mq server.we need to send post request with this endpoint actuator.rabbit mq
+is dependent on earlang so we need to install earlang first.
+
+Enable Rabbit MQ Server:-> rabbitmq-plugins enable rabbitmq_management
+default username and password:
+guest 
+guest
+
+default port:-> 15672
+service port:-> 5672
+
+http://localhost:8012/actuator/busrefresh with post request to broadcast all changes
+to the receiver.
+
+Note:-> if we want to provide configuration for multiple microservices from the
+spring cloud config server then we need to create a properties file with name
+of the microservice then that properties file changes only broadcast to that 
+microservice.
+
+Encryption and Decryption:-> we have learned how to use spring cloud config server for
+centralized configuration and how it server configuration properties to micro services
+from a remote git repository or from a native file system.now our property files can 
+contain sensitive information which we might not feel comfortable to keep an clear
+text especially when we upload this information to a third party service.there is always
+a chance that our information can be compromised and even if it happens we still want 
+to be protected.and an example of sensitive information which we do not want to keep an
+clear text is a database password or Jwt secret key.and good news is that spring cloud
+config provides us with a very convenient way to encrypt configuration properties so that
+we can keep them in the remote property file protected.we can encrypt the value of any
+selected property which we feel is a sense of information and then spring cloud config
+will decrypt it for us automatically when serving these values to our micro services.
+spring cloud config supports to different encryption types
+
+i. Symmetric Encryption(Shared):-> it is a bit quicker to setup and is a bit easier to
+use.we want to come up with a unique alphanumeric string of characters which will be 
+used as an encryption key.this same key will then be used to encrypt and to decrypt 
+information and you do not really need to have any additional programming skills to be 
+able to encrypt or decrypt information.it is all done behind the scenes for us by the
+framework and is made extremely simple for us to use.
+
+ii. Asymmetric Encryption(RSA Keypari):-> now a symmetric encryption is a superior type
+of encryption and it requires us to use each other command line activity called key tool.
+we will use key tool to generate a password protected key store file this key store file
+will contain a private and a public key which will be used for encryption and decryption 
+of information.encryption will be done with the public key and the private key is needed
+to decrypt that information.the process of encryption and decryption information with
+asymmetric encryption is also done behind scenes for us.it's pretty simple to use and you
+will have it set up in just a few minutes.
+
+-> Download JCE(Java Cryptography Extension)
+-> Paste these two jar files downloaded from above into C:\Program Files\Java\jdk1.8.0_291\jre\lib\security
+-> add bootstrap.properties on spring cloud config server
+-> put encrypt.key = sdlfjkds in bootstrap.properties
+-> http://localhost:8012/encrypt with post request and body with value return encrypted values
+-> http://localhost:8012/decrypt with post request and body with encrypted value
+-> http://localhost:8012/users-ws/default with get request show all the values inside
+application.properties file.
+-> here spring cloud automatically decrypt the password stored in the git and provides it
+to the all other microservices connected to it.
+
+Assymetic Encryption:->
+-> creating certificate:keytool -genkeypair -alias tcserver -storetype JKS -keystore
+serverkeystore.jks -keyalg RSA -keysize 2048 -keypass topsecret -storepass topsecret
+-> keytool -list -keystore serverkeystore.jks -storepass topsecret
+
+
+
+
+Microservices Communication:-> 
+
+i. Synchronous HTTP communication:-> This communication is synchronous and when a 
+request is sent as sender micro service has to wait until it receives a response and it
+is also a one to one way of communication.one micro service can send only one request
+to a target microservice.
+
+ii. Asynchronous communication over AMQP:-> microservice can communicate with each other
+is a asynchronous and it's over a protocol like amqp which stands for advance message 
+queueing protocol when micro services use queues to exchange messages. a messages is
+plcaed into a queue and sender micro service does not wait until this message is processed.
+in other microservice which is called consumer consues this message from a queue.this way
+there can be even multiple consumers of single message and if a task to process the
+message is very time and resource consuming like for example image or video download and 
+processing then sender micro service does not need to wait until this very heavy task 
+is performed.in upcoming lecture,you will learn how to make our micro services communicate
+with each other over HTTP.
+
+we will update our users micro service to make it use a very simple HTTP client which is
+called rest template.let's say we have an instance of users micro service which needs to
+request a list of user photo albums from an album micro service.let's say we have this
+three instances of albums in i running.each instance of album micro service will start
+and be run on it's own port number.so in this case how will the user micro service know
+which instances of albums micro service it needs to send http request to get the list of
+albums. the solution this problem we have eureka discovery service.when each instance
+of our micro service starts up it register itself with eureka discovery service and 
+eureka becomes aware of all instances of the  our micro service and it knows the address
+and port number of each of them.the users micro service can now learn the location of
+all instances of album microservice by asking this information from eureka and then
+send any requests to one of them.but in this case how do we know which instance of album
+microservice we should commuicate with we have threee of them.is it first,is it second
+instance of is it the third instance. to distribute load between album micro service
+equally we need to somehow bonds this issue requests that are sent to album microservice
+and we can of course do it programatically but a better solution will be to use and it 
+should be client that supports client site load balancing.
+an example of such HTTP client can be a very populart HTTP client called rest template
+or declarative http client called fein.in this case we will not need to implement client
+side load balancing ourselves programatically and to send a request to an album
+microservice.all we need to know is a name of this microservice and there which it 
+registered with eureka discovery service for example if an application name of our album
+microservice is album-ws then our users micro service will need to send this request
+to each HTTP and then the name of album's microservice.then they request path to 
+resource rest template and eureka discovery service will do the rest.
+
+
+Fein:-> it is a http client which helps our spring boot application to programmatically
+send an http request to a remote and internal microservice and then get back response.
+the biggest difference between fein and rest template is that fein is a declartive http
+client.to create a new fein client we need to create a new java interface andd then 
+annotated with fein inside fein client.which will also use annotation for example
+get mapping annotation which you've seen the code snippet example below.
+
+@FeignClient(name="album-ws")
+public interface AlbumsServiceClient{
+	@GetMappint("/users/${id}/albums")
+ 	public List<AlbumResponseModel> getAlbums(@PathVariable String id)
+}
+feign also support client side load balancing.spring cloud intefrates ribbon and eureka
+to provide a load balance functionality where we use feign to send a request to a local
+micro service which is register with eureka.
+-> add feign dependency to the users microservice
+-> add @EnableFeignClients to users microservice main class file
+-> add AlbumServiceClient as feign client to users microservice.
+
+Note: feign client can send the exception so we need to handle http exception.
+
+
+Hystrix Circuit Breaker with Feign:-> In Microservices architecture it is common that
+microservices communicate with each other by sending http request and we know that http
+request can be fail and they can fail for different reason.one of them for example can
+be destination microservice down or is too busy processing other http request and could
+not respond so our http request has time out.you will learn to make your inter serious
+communication in micro services falult tolerant.you will learn how to use feign client 
+together with hystrix circuit breaker to use a fallback method to prevent failure when a
+destination microservice is down and is not available.
+
+Let's consider simple example.on screen you can see two micriservices users and albums
+microservice.in users micro service we have the getAlbums method which uses feign client
+to send that http request to album microservice to get list of user albums.let consider
+that albums microservice goes down and does not respond because albums microservice does
+not respond then users microservice might throw an error and not return expected result and
+there might be other micrioservice that depend on the information that albums service 
+returns.here if other microservice returns the error message and then all the microservice
+which depend on this service.when other microservices fail all the other micriservices
+which depend on this microservice automatically fail.to avoid this problem we can use
+feign client together with hystrix circuit breaker.
+
+Until the albums micro service is not available and is not responding circuit breaker
+will help us call a fallback method using which we can return default values which can
+be either hardcoaded in the method itself or read from a different source.so until the
+connection with albums microservice is broken this circuit will remain opened and instead
+of sending issued request to an unhealthy albums microservice feign client will use the provided
+fallback  method and as soon as albums micro service starts responding again.circuit breaker
+will automatically close and calls the http request will be directed to albums micro service
+again and fallback method will no longer be used.
+
+as developer we do not have to write any code to check if albums microservice is availabel
+or not and when to use the fallback method.this code has already been written for us
+and all we need to do is to add a new dependency for hysterics in pom.xml file and
+configure a fallback method which will be used if the destination microservice is down.
+
+-> add hystrix dependency to users microservice.
+-> enable hystrix from application.properties
+-> add fallback method on feign client
+
+Distributed Tracing with Sleuth and Zipkins:-> Sleuth and Zipkins used to trace request
+that take place between your micro services.your api might have many micro services and
+some of this micro services might be communicating with each other and in a distributed
+architecture like this it is very important to be able to trace micro services communication
+so that we can identify potentially slow micro services or maybe if they're in communication
+so that we can work on it and fix the problem to trace microservices communication.we can
+use spring cloud sleuth and zipkins.both are two different projects.we use spring cloud
+sleuth to a add a  couple of additional details to a login information that our micro
+services produce.Use this to additional pieces fo information are our trace id and span
+id.there will be added to our log file and if needed it can be sent over to zipkins server
+for us to be able to see those details in a very friendly graphical user interface.so
+sleuth labels log in information with id's and zipkins uses this information to present
+it to us in a graphical user interface so that we can better visualize it and if there
+are too many entries in the list we can search for it's records using an easy to use interface.
+
+this is why for distributed tracing we use these two together to be able to trace 
+communication between multiple micro services.it's important to understand what this 
+trace id and span ids.
+the span id is a unit of work for example for every new http  request that your
+microservice will send sleuth will label it with a new span id.   
+-> we are going to use slueth in users microservice.
+
+Note:-> we can install zipkins server on pc using java,docker,running from source.full
+documentation is available on zipkin.apache.org.sleuth sends all tracing logs to 
+zipkins server then it is able to show all the tracing in zipkins server.
+
+curl -sSL https://zipkin.io/quickstart.sh | bash -s
+or click on lateast relaease
+browse to jar file location in command line then enter
+java -jar zipkinis-server .exe file name append with .jar
+localhost:9411 
+
+Span ID – The basic unit of work. For example, sending an HTTP Request will generate 
+a new span id.  If there will be another Microservice called within the same flow,
+then a new span id will be generated. All of these spans will be grouped under the 
+same trace id.
+
+
+Trace ID – Is used to group a number of spans. The initial HTTP Request will generate
+ a new trace id. If within the same flow, a Microservice will send HTTP request to
+ another Microservice, then Trace Id for both of these HTTP Requests will be the same.
+ HTTP Requests sent by two different users will generate two different trace id.
+
+Aggregiate Log Files with ELK Stack:-> in this section you will learn how to aggregate
+log files from your many different microservices in one place and to aggregiate log 
+files in one place we will use the ELK stack.ELK is a very popular acronym which stands
+for the three tools that are being used together.
+i. logstach(collect,filter,transform)
+ii. elasticsearch(search)
+iii. kibana
+
+multiple microservices produces a log file so there could be any no of microservices
+which produces a log files.it is not convenient and it is not efficient to open the
+log files one by one.we need a solution that will aggregate this log files in one place
+and have some kind of visual interface which would allows us to view the content of this
+log files to collect this lock files in one place we will use the log stash.it is a tool
+that we will need to install on our computer and it can then collect log files from the
+multiple micro services.it can filter and it can transform them as needed and it can
+pass it on to the next step in the flow at which these log files will need to be indexed
+so that they can be searchable.and as a search engine we will use elastic search and 
+elastic search is a tool which will index and it will store the log files data centrally
+so that we can search this log file records and analyze them.
+ans as a visual interface to help us search and visualize log files later we will use
+kibana.kibana is a very advanced tool and it has plenty of functionality to offer and
+in the following videos.in this section we will how to download install and run of the
+log stash,elstic serach and kibana.
+
+-> add logging.file = users-ws.log(name of file of each microservice)
+-> download logstach
+-> create a file inside logstach folder and provide input and out file for reading
+data from the microservces log file and copy it into the output file.create simple-config
+.conf
+-> start logstash api endpoints
+C:\Users\Programmer\OneDrive\Desktop\ELK>logstash -f simple-config.conf
+ -> add system variable bin path for kibana and elastic search also
+
+-start elastic search server as 
+C:\Users\Programmer\OneDrive\Desktop\ELK\elasticsearch\bin>elasticsearch.bat
+same for kibana too
+access elastic search from here http://localhost/9200
+
+
+
+
+
+http://localhost:8011/users-ws/users/a73b2248-2798-48a8-93ef-4e8f2a9a7a03 get
+http://localhost:8011/users-ws/users/login post
+
+running order:-> after creating log file from starting
+elastic search -> logstash -> kibana
+
+#server.port: 5601 default port seee config yml file(kibana)
+http://localhost:9200 defalut port(elastic)
+9600(logstash)
+
+
+
+
+
+
+
+
+input{
+	file{
+		type=>"users-ws-log"
+		path=>"C:\Users\Programmer\OneDrive\Desktop\Desktop FIle\Microservices\2.PhotoApp-Users-Eureka-Client-Microservice\users-ws.log"
+         }
+	file{
+		type=>"albums-ws-log"
+		path=>"C:\Users\Programmer\OneDrive\Desktop\Desktop FIle\Microservices\PhotoAppApiAlbums-master\albums-ws.log"
+         }
+}
+
+output{
+	if [type] == "users-ws-log"{
+		elasticsearch {
+			hosts => ["localhost:9200"]
+			index => "users-ws-%{+YYYY.MM.dd}"
+		}
+	}
+	else if [type] == "albums-ws-log"{
+		elasticsearch {
+			hosts => ["localhost:9200"]
+			index => "albums-ws-%{+YYYY.MM.dd}"
+		}
+	}
+
+	stdout { codec => rubydebug }
+}
+
+
+Adding Security to Eureka Dashboard:->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

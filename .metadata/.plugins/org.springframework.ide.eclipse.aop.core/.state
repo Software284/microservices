@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="3.PhotoApp-Account-Eureka-Client-Microservice"/>
+<aop-project name="4.PhotoApp-Albums-Eureka-Client-Microservice"/>
+<aop-project name="5.PhotoApp-Zuul-Api-Gateway-Microservice"/>
+<aop-project name="6.PhotoApp-Config-Server"/>
+<aop-project name="2.PhotoApp-Users-Eureka-Client-Microservice"/>
+</aop-reference-model>

@@ -1,0 +1,5 @@
+package com.lamichhane.users.feignclient;
+
+public interface AlbumServiceClient {
+
+}

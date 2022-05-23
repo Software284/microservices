@@ -1,0 +1,15 @@
+package com.lamichhane.users.security;
+
+import org.springframework.core.env.Environment;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.lamichhane.users.service.UserService;
+
+public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+	private UserService userService;
+	private Environment environment;
+	
+	public AuthenticationFilter(UserService userService,Environment environment,AuthenticationManger authenticationManager) {
+		
+	}
+}

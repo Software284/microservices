@@ -1,0 +1,11 @@
+package com.lamichhane.users.feignclient;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@FeignClient(name="albums-ws")
+public interface AlbumServiceClient {
+
+	@GetMapping("/users/{id}/albums")
+	public void getAlbums();
+}

@@ -1,0 +1,6 @@
+package com.lamichhane.eureka.server.security;
+
+@EnableWebSecurity
+public class WebSecurity {
+
+}

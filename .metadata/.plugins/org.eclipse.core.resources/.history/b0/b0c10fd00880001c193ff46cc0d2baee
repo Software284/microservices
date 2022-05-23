@@ -1,0 +1,6 @@
+package com.lamichhane.users.service;
+
+@Service
+public class UsersService {
+
+}

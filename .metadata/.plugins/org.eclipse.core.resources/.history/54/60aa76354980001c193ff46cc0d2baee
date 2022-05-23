@@ -1,0 +1,5 @@
+package com.lamichhane.users.model;
+
+public class LoginRequestModel {
+
+}

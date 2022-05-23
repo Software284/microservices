@@ -1,0 +1,36 @@
+package com.lamichhane.users.service;
+
+import java.util.UUID;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service;
+
+import com.lamichhane.users.dao.UsersDao;
+import com.lamichhane.users.entity.UserEntity;
+import com.lamichhane.users.shared.UserDto;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	UsersDao usersDao;
+
+	@Override
+	public UserDto createUser(UserDto userDetails) {
+		
+		userDetails.setUserId(UUID.randomUUID().toString());
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		UserEntity entity = mapper.map(userDetails, UserEntity.class);
+		entity.setEncryptedPassword("test");
+		
+		UserDto dto = mapper.map(entity, UserDto.class);
+		
+		usersDao.save(entity);
+		return dto; 
+	}
+
+}

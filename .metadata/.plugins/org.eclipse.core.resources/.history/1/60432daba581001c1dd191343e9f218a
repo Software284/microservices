@@ -1,0 +1,4 @@
+# symettic encryption
+# encrypt.key = skdjflsdjflsdjlf
+
+encrypt.key-store.location = classpath:serverkeystore.jks

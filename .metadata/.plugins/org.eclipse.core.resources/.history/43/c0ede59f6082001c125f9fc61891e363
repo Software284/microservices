@@ -1,0 +1,6 @@
+package com.lamichhane.users.feignclient;
+
+@FeignClient(name="albums-ws")
+public interface AlbumServiceClient {
+
+}

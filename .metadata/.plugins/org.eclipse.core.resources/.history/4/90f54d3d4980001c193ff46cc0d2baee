@@ -1,0 +1,9 @@
+package com.lamichhane.users.model;
+
+public class LoginRequestModel {
+
+	private String email;
+	private String password;
+	
+	
+}

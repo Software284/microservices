@@ -1,0 +1,75 @@
+package com.lamichhane.zuul.api.gateway.security;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+
+
+public class AuthorizationFilter extends BasicAuthenticationFilter {
+	
+	private Environment environment;
+	
+	public AuthorizationFilter(AuthenticationManager authManager,Environment environment) {
+		super(authManager);
+		this.environment = environment;
+	}
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		
+		String authorizationHeader = request.getHeader(environment.getProperty("authorization.token.header.name"));
+		if(authorizationHeader == null || !authorizationHeader.startsWith(environment.getProperty("authorization.token.header.prefix")))
+		{
+			chain.doFilter(request, response);
+			return;
+		}
+		
+		UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		chain.doFilter(request, response);
+	}
+
+	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+		
+		String authorizationHeader = request.getHeader(environment.getProperty("authorization.token.header.name"));
+		if(authorizationHeader == null) {  }
+		String token = authorizationHeader.replace(environment.getProperty("authorization.token.header.prefix"), "");
+		System.out.println("Fuck You ="+environment.getProperty("token.secret"));
+		String userNameFromJwt = JWT.require(Algorithm.HMAC512(environment.getProperty("token.secret").getBytes()))
+                .build()
+                .verify(token)
+                .getSubject();
+		
+		
+//		String userId = Jwts.parser()
+//				.setSigningKey(DatatypeConverter.parseBase64Binary(environment.getProperty("token.secret")))
+//				.parseClaimsJws(token)
+//				.getBody()
+//				.getSubject();
+		
+		
+		if(userNameFromJwt == null) {
+			return null;
+		}
+				
+		return new UsernamePasswordAuthenticationToken(userNameFromJwt,null,new ArrayList<>());
+	}
+	
+	
+}

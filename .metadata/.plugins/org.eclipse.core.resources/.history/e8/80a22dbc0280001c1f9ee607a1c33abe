@@ -1,0 +1,5 @@
+package com.lamichhane.users.enity;
+
+public class CreateUserRequestModel {
+
+}

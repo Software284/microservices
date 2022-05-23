@@ -1,0 +1,7 @@
+package com.lamichhane.users.security;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurity {
+
+}

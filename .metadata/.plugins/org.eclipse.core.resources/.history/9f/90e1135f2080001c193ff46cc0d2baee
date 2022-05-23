@@ -1,0 +1,5 @@
+package com.lamichhane.users.security;
+
+public class WebSecurity {
+
+}

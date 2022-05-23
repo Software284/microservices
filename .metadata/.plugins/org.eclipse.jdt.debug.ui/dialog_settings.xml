@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">
+		<item key="ShowStatusLine" value="true"/>
+		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History&gt;&#x0D;&#x0A;&lt;historyRootNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=3.PhotoApp-Account-Eureka-Client-Microservice/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.lamichhane.account{Application.java[Application&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=5.PhotoApp-Config-Server/src\/main\/java&amp;lt;com.lamichhane.config.server{Application.java[Application&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=1.PhotApp-Eureka-Server-Microservice/src\/main\/java&amp;lt;com.lamichhane.eureka.server{PhotAppDiscoveryServiceApplication.java[PhotAppDiscoveryServiceApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=4.PhotoApp-Zuul-Api-Gateway-Microservice/src\/main\/java&amp;lt;com.lamichhane.zuul.api.gateway{Application.java[Application&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=2.PhotApp-Users-Eureka-Client-Microservice/src\/main\/java&amp;lt;com.lamichhane.users{PhotAppApiUsersApplication.java[PhotAppApiUsersApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=6.PhotoApp-Albums-Eureka-Client-Microservice/src\/main\/java&amp;lt;com.appsdeveloperblog.photoapp.api.albums{PhotoAppApiAlbumsApplication.java[PhotoAppApiAlbumsApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=6.PhotoApp-Config-Server/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.lamichhane.config.server{Application.java[Application&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=1.PhotoApp-Eureka-Server-Microservice/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.lamichhane.eureka.server{PhotAppDiscoveryServiceApplication.java[PhotAppDiscoveryServiceApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=5.PhotoApp-Zuul-Api-Gateway-Microservice/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.lamichhane.zuul.api.gateway{Application.java[Application&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=2.PhotoApp-Users-Eureka-Client-Microservice/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.lamichhane.users{PhotAppApiUsersApplication.java[PhotAppApiUsersApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;infoNode&gt;=4.PhotoApp-Albums-Eureka-Client-Microservice/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&amp;lt;com.appsdeveloperblog.photoapp.api.albums{PhotoAppApiAlbumsApplication.java[PhotoAppApiAlbumsApplication&lt;/infoNode&gt;&#x0D;&#x0A;&lt;/historyRootNode&gt;&#x0D;&#x0A;&lt;/History&gt;"/>
+		<section name="DialogBoundsSettings">
+			<item key="DIALOG_HEIGHT" value="500"/>
+			<item key="DIALOG_WIDTH" value="600"/>
+			<item key="DIALOG_X_ORIGIN" value="391"/>
+			<item key="DIALOG_Y_ORIGIN" value="39"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		</section>
+	</section>
+	<section name="expressionHistory">
+	</section>
+	<section name="org.eclipse.jdt.internal.debug.ui.ExpressionInformationControlCreator$ExpressionInformationControl">
+		<item key="WIDTH" value="614"/>
+		<item key="HEIGHT" value="194"/>
+		<item key="SashWeightTree" value="200"/>
+		<item key="SashWeightDetails" value="200"/>
+	</section>
+</section>
